@@ -1,0 +1,22 @@
+{
+  "name": "arc-app-pertama",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@circle-fin/adapter-viem-v2": "^1.11.2",
+    "@circle-fin/app-kit": "^1.7.0",
+    "@circle-fin/developer-controlled-wallets": "^10.6.0",
+    "axios": "^1.16.1",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3",
+    "viem": "^2.51.3"
+  }
+}
