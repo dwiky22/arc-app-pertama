@@ -1,39 +1,36 @@
 import { initiateDeveloperControlledWalletsClient } from "@circle-fin/developer-controlled-wallets";
 
 const client = initiateDeveloperControlledWalletsClient({
-  apiKey: process.env.CIRCLE_API_KEY as string,
-  entitySecret: process.env.ENTITY_SECRET as string,
+	apiKey: process.env.CIRCLE_API_KEY as string,
+	entitySecret: process.env.ENTITY_SECRET as string,
 });
 
+const SENDER_WALLET_ID = "230247ca-75ed-5750-ba42-c6a366d390f7";
+const RECEIVER_ADDRESS = "0x5785da332f4c52b2cd71dc6f66204e336ac5d9a7";
+
 const main = async () => {
-  console.log("🚀 Arc Testnet USDC Payment App");
-  console.log("================================");
+	console.log("🚀 Arc Testnet USDC Payment App");
 
-  const walletSetRes = await client.createWalletSet({
-    name: "USDC Payment Wallet Set",
-  });
-  const walletSetId = walletSetRes.data?.walletSet?.id as string;
-  console.log("\n✅ Wallet Set ID:", walletSetId);
-
-  const walletRes = await client.createWallets({
-    accountType: "EOA",
-    blockchains: ["ARC-TESTNET"],
-    count: 2,
-    walletSetId,
-  });
-
-  const sender = walletRes.data?.wallets?.[0];
-  const receiver = walletRes.data?.wallets?.[1];
-
-  console.log("\n📤 Sender Wallet:");
-  console.log("   Address:", sender?.address);
-
-  console.log("\n📥 Receiver Wallet:");
-  console.log("   Address:", receiver?.address);
-
-  console.log("\n✅ App berjalan sempurna di ARC-TESTNET!");
-  console.log("📍 Claim USDC di: https://faucet.circle.com");
-  console.log("   Gunakan address:", sender?.address);
+	try {
+		const transferRes = await client.createTransaction({
+			walletId: SENDER_WALLET_ID,
+			tokenId: "15dc2b5d-0994-58b0-bf8c-3a0501148ee8",
+			destinationAddress: RECEIVER_ADDRESS,
+			amounts: ["0.01"],
+			blockchain: "ARC-TESTNET",
+			fee: {
+				type: "level",
+				config: {
+					feeLevel: "MEDIUM",
+				},
+			},
+		});
+		console.log("\n✅ Transfer berhasil!");
+		console.log("   TX ID:", transferRes.data?.id);
+		console.log("   Status:", transferRes.data?.state);
+	} catch (err: any) {
+		console.log("\n❌ Error:", err.message);
+	}
 };
 
 main().catch(console.error);
